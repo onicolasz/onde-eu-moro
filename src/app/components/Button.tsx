@@ -3,7 +3,7 @@ import { useState } from "react";
 export default function Button({ onClick }: { onClick: () => void }) {
   return (
     <div
-      className="fixed bottom-4 right-4 z-10 bg-white rounded-xl border border-zinc-950 p-4 cursor-pointer"
+      className="fixed bottom-4 right-16 z-10 shadow-xl bg-slate-200 text-gray-600 rounded-2xl border border-gray-600 px-4 py-3 cursor-pointer"
       onClick={onClick}
     >
       Criar evento

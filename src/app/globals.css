@@ -40,3 +40,9 @@ body {
   transition: opacity 300ms;
 }
 
+
+.gm-style-cc,
+a[href="https://www.google.com/intl/en-US_US/help/terms_maps.html"],
+.gmnoprint a[href="https://www.google.com/maps/@?api=1&map_action=report_error"] {
+  display: none !important;
+}

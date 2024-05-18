@@ -5,6 +5,7 @@ import SearchBar from "./components/SearchBar";
 import Button from "./components/Button";
 import Map from "./components/Map";
 import CreateEvent from "./components/CreateEvent";
+import AddressInfoCard from "./components/AddressInfoCard";
 import { CSSTransition } from 'react-transition-group';
 
 interface Event {
@@ -24,6 +25,8 @@ export default function Home() {
   const [zoom, setZoom] = useState<number>(12);
   const [showMessage, setShowMessage] = useState<boolean>(false);
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
+  const [showAddressInfo, setShowAddressInfo] = useState<boolean>(false);
+  const [searchedAddress, setSearchedAddress] = useState<string>('Endereço');
 
   const handleSearch = async (address: string) => {
     const response = await fetch(`/api/search?address=${address}`);
@@ -39,6 +42,8 @@ export default function Home() {
       const eventsData = await eventsResponse.json();
 
       setEvents(eventsData);
+      setSearchedAddress(address)
+      setShowAddressInfo(true)
     }
   };
 
@@ -81,6 +86,9 @@ export default function Home() {
       </CSSTransition>
       {selectedAddress && (
         <CreateEvent address={selectedAddress} />
+      )}
+      {(showAddressInfo && !selectedAddress) && (
+        <AddressInfoCard events={events} address={searchedAddress} />
       )}
     </main>
   );
