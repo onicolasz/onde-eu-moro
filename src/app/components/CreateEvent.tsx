@@ -50,7 +50,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({
           </select>
         </div>
         <div className="mt-5">
-          <label className="block mb-1 ml-1 font-medium">Descrição</label>
+          <label className="block mb-1 ml-1 font-medium">Título</label>
           <input
             className="min-w-full p-2 rounded-xl bg-gray-200"
             type="text"
@@ -90,7 +90,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({
             size="md"
             step={0.1}
             color="foreground"
-            maxValue={20}
+            maxValue={50}
             minValue={1}
             defaultValue={1}
             className="max-w-md"
