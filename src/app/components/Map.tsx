@@ -9,15 +9,23 @@ interface Event {
   occurred_at: string;
 }
 
+interface Circle {
+  lat: number; 
+  lng: number; 
+  radius: number | null;
+}
+
 interface MapProps {
-  center: { lat: number; lng: number };
+  center: { lat: number; lng: number } | null;
   events: Event[];
   zoom: number;
   onMapClick: (lat: number, lng: number) => void;
+  newCircle: Circle;
 }
 
-const Map: React.FC<MapProps> = ({ center, events, zoom, onMapClick }) => {
+const Map: React.FC<MapProps> = ({ center, events, zoom, onMapClick, newCircle }) => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const circleRef = useRef<google.maps.Circle | null>(null);
 
   useEffect(() => {
     const loader = new Loader({
@@ -65,10 +73,27 @@ const Map: React.FC<MapProps> = ({ center, events, zoom, onMapClick }) => {
           circle.addListener("mouseout", () => {
             infoWindow.close();
           });
+          
         });
+
+        if (newCircle.lat && newCircle.lng && newCircle.radius !== null) {
+          if (circleRef.current) {
+            circleRef.current.setMap(null);
+          }
+          circleRef.current = new google.maps.Circle({
+            strokeColor: "blue",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "blue",
+            fillOpacity: 0.35,
+            map,
+            center: { lat: newCircle.lat, lng: newCircle.lng },
+            radius: newCircle.radius * 10,
+          });
+        }
       }
     });
-  }, [center, events, onMapClick, zoom]);
+  }, [center, events, onMapClick, zoom, newCircle]);
 
   return <div ref={mapRef} style={{ position: "absolute", top: 0, left: 0, width: "100vw", height: "100vh" }} />;
 };
