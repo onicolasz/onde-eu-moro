@@ -30,7 +30,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <div>
+    <div className="relative">
       <form
         onSubmit={handleSubmit}
         className="z-10 items-center justify-between text-sm flex"
@@ -58,7 +58,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           </button>
         </div>
       </form>
-      <ul className="bg-white rounded-xl mt-2">
+      <ul className="absolute w-full bg-white rounded-xl mt-2">
         {suggestions.map((suggestion, index) => (
           <li
             key={index}
