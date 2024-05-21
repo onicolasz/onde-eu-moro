@@ -19,14 +19,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     <form onSubmit={handleSubmit} className="z-10 items-center justify-between text-sm flex">
      <div className="relative">
         <input
-          className="min-w-96 justify-center p-4 pr-10 rounded-3xl shadow-lg bg-p-4 border border-gray-500 bg-slate-200"
+          className="min-w-96 justify-center p-4 pr-10 rounded-3xl shadow-lg bg-p-4 border border-slate-200 bg-white text-medium"
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Digite seu endereço de pesquisa"
         />
         <button type="submit" className="absolute right-0 top-0 bottom-0 bg-transparent border-0 cursor-pointer p-3">
-          <FontAwesomeIcon icon={faSearch} className="text-gray-500 mr-1" size="lg" />
+          <FontAwesomeIcon icon={faSearch} className="text-slate-400 mr-1" size="lg" />
         </button>
       </div>
     </form>

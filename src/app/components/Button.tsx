@@ -1,12 +1,20 @@
-import { useState } from "react";
+import React from 'react';
 
-export default function Button({ onClick }: { onClick: () => void }) {
+interface ButtonProps {
+  className?: string;
+  text: string;
+  onClick?: () => void;
+}
+
+const Button: React.FC<ButtonProps> = ({ className, text, onClick }) => {
   return (
-    <div
-      className="fixed bottom-4 right-16 z-10 shadow-xl bg-slate-200 text-gray-600 rounded-2xl border border-gray-600 px-4 py-3 cursor-pointer"
+    <button
+      className={`${className} rounded-2xl font-medium border border-slate-400 px-4 py-3 cursor-pointer`}
       onClick={onClick}
     >
-      Criar evento
-    </div>
+      {text}
+    </button>
   );
-}
+};
+
+export default Button;

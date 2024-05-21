@@ -13,7 +13,7 @@ interface AddressInfoCardProps {
 
 const AddressInfoCard: React.FC<AddressInfoCardProps> = ({ address, events }) => {
   return (
-    <div className="fixed bottom-20 right-16 bg-slate-200 border border-gray-600 p-4 rounded-xl max-w-md shadow-lg">
+    <div className="fixed bottom-20 right-16 bg-white border border-slate-200 p-4 rounded-xl max-w-md shadow-lg">
       <div>
         <p className="font-bold">{address}</p>
         <div className="mt-5">
