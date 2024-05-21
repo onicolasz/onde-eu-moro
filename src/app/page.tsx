@@ -1,20 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchBar from "./components/SearchBar";
 import Button from "./components/Button";
 import Map from "./components/Map";
 import CreateEvent from "./components/CreateEvent";
 import AddressInfoCard from "./components/AddressInfoCard";
 import { Transition } from "react-transition-group";
-
-interface Event {
-  latitude: number;
-  longitude: number;
-  radius: number;
-  title: string;
-  occurred_at: string;
-}
+import { Event } from "./types/event";
 
 export default function Home() {
   const [center, setCenter] = useState<{ lat: number; lng: number } | null>({
@@ -26,13 +19,32 @@ export default function Home() {
   const [showMessage, setShowMessage] = useState<boolean>(false);
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
   const [showAddressInfo, setShowAddressInfo] = useState<boolean>(false);
-  const [searchedAddress, setSearchedAddress] = useState<string>("Endereço");
+  const [searchedAddress, setSearchedAddress] = useState<string | null>(null);
   const [newCircle, setNewCircle] = useState<{
     lat: number;
     lng: number;
     radius: number | null;
   }>({ lat: 0, lng: 0, radius: null });
   const [showCreateEvent, setShowCreateEvent] = useState<boolean>(false);
+  const [clickedPosition, setClickedPosition] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    if (showMessage && clickedPosition) {
+      const fetchAddress = async () => {
+        const response = await fetch(`/api/reverse-geocode?lat=${clickedPosition.lat}&lng=${clickedPosition.lng}`);
+        const data = await response.json();
+  
+        if (response.status === 200) {
+          setSelectedAddress(data.address);
+          setNewCircle({ lat: clickedPosition.lat, lng: clickedPosition.lng, radius: 1 });
+          setShowMessage(false);
+        }
+      };
+  
+      fetchAddress();
+      setClickedPosition(null);
+    }
+  }, [showMessage, clickedPosition]);
 
   const handleSearch = async (address: string) => {
     const response = await fetch(`/api/search?address=${address}`);
@@ -58,19 +70,8 @@ export default function Home() {
     setShowCreateEvent(true);
   };
 
-  const handleMapClick = async (lat: number, lng: number) => {
-    if (showMessage) {
-      const response = await fetch(
-        `/api/reverse-geocode?lat=${lat}&lng=${lng}`
-      );
-      const data = await response.json();
-
-      if (response.status === 200) {
-        setSelectedAddress(data.address);
-        setNewCircle({ lat, lng, radius: 1 });
-        setShowMessage(false);
-      }
-    }
+  const handleMapClick = async (lat: number, lng: number)=> {
+    setClickedPosition({ lat, lng });
   };
 
   const updateCircleRadius = (radius: number) => {
@@ -106,7 +107,12 @@ export default function Home() {
           onClick={handleButtonClick}
         />
       )}
-      <Transition in={!!selectedAddress} timeout={150} mountOnEnter unmountOnExit>
+      <Transition
+        in={!!selectedAddress}
+        timeout={150}
+        mountOnEnter
+        unmountOnExit
+      >
         {(state) => (
           <div
             className={`fixed bottom-4 right-16 z-20 ${

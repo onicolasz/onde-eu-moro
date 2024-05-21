@@ -12,6 +12,7 @@ export default async function handler(
         latitude: -30.036104,
         longitude: -51.2241612,
         radius: 10.0,
+        risk_level: 5,
         title: "Incendio no prédio Solar Porto Belo",
         occurred_at: new Date(),
       },

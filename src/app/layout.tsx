@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat, Roboto } from "next/font/google";
+//import { Inter, Montserrat, Roboto } from "next/font/google";
 import "./globals.css";
 
+/*
 const inter = Inter({ subsets: ["latin"] });
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -11,6 +12,7 @@ const roboto = Roboto({
   subsets: ['latin'],
   display: 'swap',
 })
+*/
 
 export const metadata: Metadata = {
   title: "Create Next App",
