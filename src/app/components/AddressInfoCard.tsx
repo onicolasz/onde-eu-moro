@@ -1,12 +1,8 @@
-import { Event } from '../types/event'
+import { useContext } from 'react';
+import { MapContext } from '@/contexts/map';
 
-interface AddressInfoCardProps {
-  address: string | null;
-  events: Event[];
-}
-
-const AddressInfoCard: React.FC<AddressInfoCardProps> = ({ address, events }) => {
-  if(!address) return null
+const AddressInfoCard = () => {
+  const { address  } = useContext(MapContext)
   return (
     <div className="fixed bottom-20 right-16 bg-white border border-slate-200 p-4 rounded-xl max-w-md shadow-lg">
       <div>

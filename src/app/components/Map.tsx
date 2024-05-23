@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
-import { Event } from "../types/event";
+import { MapContext } from "@/contexts/map";
 
 interface Circle {
   lat: number;
@@ -9,20 +9,15 @@ interface Circle {
 }
 
 interface MapProps {
-  center: { lat: number; lng: number } | null;
-  events: Event[];
-  zoom: number;
   onMapClick: (lat: number, lng: number) => void;
   newCircle: Circle;
 }
 
 const Map: React.FC<MapProps> = ({
-  center,
-  events,
-  zoom,
   onMapClick,
   newCircle,
 }) => {
+  const { center, zoom, events  } = useContext(MapContext)
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const circleRef = useRef<google.maps.Circle | null>(null);

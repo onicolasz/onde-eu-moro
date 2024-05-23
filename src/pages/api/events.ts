@@ -1,3 +1,4 @@
+import { prisma } from "@/utils/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -7,17 +8,18 @@ export default async function handler(
   const { latitude, longitude } = req.query;
 
   try {
-    const events = [
-      {
-        latitude: -30.036104,
-        longitude: -51.2241612,
-        radius: 10.0,
-        risk_level: 5,
-        title: "Incendio no prédio Solar Porto Belo",
-        occurred_at: new Date(),
-      },
-    ];
-    res.status(200).json(events);
+    const events = await prisma.event.findMany();
+
+    const eventsTransform = events.map((event) => {
+      return {
+        ...event,
+        latitude: event.latitude.toNumber(),
+        longitude: event.longitude.toNumber(),
+        radius: event.radius.toNumber(),
+      };
+    });
+
+    res.status(200).json(eventsTransform);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch events" });
   }

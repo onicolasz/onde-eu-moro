@@ -1,25 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import SearchBar from "./components/SearchBar";
 import Button from "./components/Button";
 import Map from "./components/Map";
 import CreateEvent from "./components/CreateEvent";
 import AddressInfoCard from "./components/AddressInfoCard";
 import { Transition } from "react-transition-group";
-import { Event } from "./types/event";
+import { MapContext } from "@/contexts/map";
 
 export default function Home() {
-  const [center, setCenter] = useState<{ lat: number; lng: number } | null>({
-    lat: -23.55052,
-    lng: -46.633308,
-  });
-  const [events, setEvents] = useState<Event[]>([]);
-  const [zoom, setZoom] = useState<number>(12);
+  const { address  } = useContext(MapContext)
   const [showMessage, setShowMessage] = useState<boolean>(false);
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
-  const [showAddressInfo, setShowAddressInfo] = useState<boolean>(false);
-  const [searchedAddress, setSearchedAddress] = useState<string | null>(null);
   const [newCircle, setNewCircle] = useState<{
     lat: number;
     lng: number;
@@ -46,25 +39,6 @@ export default function Home() {
     }
   }, [showMessage, clickedPosition]);
 
-  const handleSearch = async (address: string) => {
-    const response = await fetch(`/api/search?address=${address}`);
-    const data = await response.json();
-
-    if (response.status === 200) {
-      setCenter({ lat: data.latitude, lng: data.longitude });
-      setZoom(18);
-
-      const eventsResponse = await fetch(
-        `/api/events?latitude=${data.latitude}&longitude=${data.longitude}`
-      );
-      const eventsData = await eventsResponse.json();
-
-      setEvents(eventsData);
-      setSearchedAddress(address);
-      setShowAddressInfo(true);
-    }
-  };
-
   const handleButtonClick = () => {
     setShowMessage(true);
     setShowCreateEvent(true);
@@ -86,12 +60,9 @@ export default function Home() {
   return (
     <main className="relative flex min-h-screen flex-col">
       <header className="absolute justify-center top-0 left-0 w-full flex flex-row p-4 z-10">
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar></SearchBar>
       </header>
       <Map
-        center={center}
-        events={events}
-        zoom={zoom}
         onMapClick={handleMapClick}
         newCircle={newCircle}
       />
@@ -129,8 +100,8 @@ export default function Home() {
           </div>
         )}
       </Transition>
-      {showAddressInfo && !selectedAddress && (
-        <AddressInfoCard events={events} address={searchedAddress} />
+      {address && !selectedAddress && (
+        <AddressInfoCard></AddressInfoCard>
       )}
     </main>
   );

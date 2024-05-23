@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 //import { Inter, Montserrat, Roboto } from "next/font/google";
 import "./globals.css";
+import { MapProvider } from "@/contexts/map";
 
 /*
 const inter = Inter({ subsets: ["latin"] });
@@ -26,7 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-inter">{children}</body>
+      <body className="font-inter">
+        <MapProvider>{children}</MapProvider>
+      </body>
     </html>
   );
 }
