@@ -2,11 +2,29 @@ import { DatePicker } from "@nextui-org/date-picker";
 import { Slider } from "@nextui-org/slider";
 import { now, getLocalTimeZone } from "@internationalized/date";
 import Button from "./Button";
+import { useState } from "react";
 interface CreateEventProps {
   address: string | null;
   updateCircleRadius: (radius: number) => void;
   onClose: () => void;
 }
+
+const getSliderColor = (value: number) => {
+  switch (value) {
+    case 1:
+      return "success"; // Verde
+    case 2:
+      return "primary"; // Amarelo
+    case 3:
+      return "secondary"; // Vermelho
+    case 4:
+      return "warning"; // Orange
+    case 5:
+      return "danger"; // Red
+    default:
+      return "foreground"; // Cor padrão (cinza)
+  }
+};
 
 const CreateEvent: React.FC<CreateEventProps> = ({
   address,
@@ -21,6 +39,8 @@ const CreateEvent: React.FC<CreateEventProps> = ({
     { value: "Barulho excessivo", label: "Barulho excessivo" },
     { value: "Assalto", label: "Assalto" },
   ];
+
+  const [riskLevel, setRiskLevel] = useState(1);
 
   const handleRadiusChange = (value: number | number[]) => {
     if (Array.isArray(value)) {
@@ -62,7 +82,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({
           </label>
           <DatePicker
             variant="faded"
-            color="default"
+            color="foreground"
             hideTimeZone
             showMonthAndYearPickers
             defaultValue={now(getLocalTimeZone())}
@@ -73,15 +93,17 @@ const CreateEvent: React.FC<CreateEventProps> = ({
           <Slider
             size="md"
             step={1}
-            color="foreground"
-            showSteps={true}
+            showSteps={false}
             showTooltip={true}
             maxValue={5}
             minValue={1}
             defaultValue={1}
             startContent={1}
             endContent={5}
-            className="max-w-md"
+            color={getSliderColor(riskLevel)}
+            onChange={(value) =>
+              setRiskLevel(Array.isArray(value) ? value[0] : value)
+            }
           />
         </div>
         <div className="mt-5">

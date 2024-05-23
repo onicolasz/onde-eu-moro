@@ -79,32 +79,34 @@ const Map: React.FC<MapProps> = ({
         mapInstanceRef.current?.setZoom(zoom);
       }
 
-      events.forEach((event) => {
-        const circle = new google.maps.Circle({
-          strokeColor: "red",
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: "red",
-          fillOpacity: 0.35,
-          map: mapInstanceRef.current,
-          center: { lat: event.latitude, lng: event.longitude },
-          radius: event.radius,
+      if(!!events && events.length > 0) {
+        events.forEach((event) => {
+          const circle = new google.maps.Circle({
+            strokeColor: "red",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "red",
+            fillOpacity: 0.35,
+            map: mapInstanceRef.current,
+            center: { lat: event.latitude, lng: event.longitude },
+            radius: event.radius,
+          });
+  
+          const infoWindow = new google.maps.InfoWindow({
+            content: `${event.title}. Ocorrido em: ${event.occurred_at}`,
+          });
+  
+          circle.addListener("mouseover", () => {
+            infoWindow.setPosition(circle.getCenter());
+            infoWindow.open(mapInstanceRef.current);
+          });
+  
+          circle.addListener("mouseout", () => {
+            infoWindow.close();
+          });
         });
-
-        const infoWindow = new google.maps.InfoWindow({
-          content: `${event.title}. Ocorrido em: ${event.occurred_at}`,
-        });
-
-        circle.addListener("mouseover", () => {
-          infoWindow.setPosition(circle.getCenter());
-          infoWindow.open(mapInstanceRef.current);
-        });
-
-        circle.addListener("mouseout", () => {
-          infoWindow.close();
-        });
-      });
-    }
+      }
+      }
   }, [events, center, zoom]);
 
   return (

@@ -91,6 +91,7 @@ export default function Home() {
                 ? "transition-transform scale-100"
                 : "transition-transform scale-0"
             }`}
+            style={{ width: '600px', transformOrigin: 'right' }}
           >
             <CreateEvent
               address={selectedAddress}
